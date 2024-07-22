@@ -64,7 +64,12 @@ if __name__ == '__main__':
         
         output_path = os.path.join(args.outdir, os.path.splitext(os.path.basename(filename))[0] + '.mp4')
         out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*"mp4v"), frame_rate, (output_width, frame_height))
-        
+
+        video_name = os.path.splitext(os.path.basename(filename))[0]
+        pgm_folder_path = os.path.join(args.outdir, video_name)
+        os.makedirs(pgm_folder_path, exist_ok=True)
+        frame_idx = 0
+
         while raw_video.isOpened():
             ret, raw_frame = raw_video.read()
             if not ret:
@@ -74,7 +79,11 @@ if __name__ == '__main__':
             
             depth = (depth - depth.min()) / (depth.max() - depth.min()) * 255.0
             depth = depth.astype(np.uint8)
-            
+
+            pgm_save_path = os.path.join(pgm_folder_path, f"{frame_idx:06}.pgm")
+            cv2.imwrite(pgm_save_path, depth)
+            frame_idx += 1
+
             if args.grayscale:
                 depth = np.repeat(depth[..., np.newaxis], 3, axis=-1)
             else:
