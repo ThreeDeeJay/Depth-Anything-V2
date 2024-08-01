@@ -80,7 +80,7 @@ if __name__ == '__main__':
             depth = (depth - depth.min()) / (depth.max() - depth.min()) * 255.0
             depth = depth.astype(np.uint8)
 
-            pgm_save_path = os.path.join(pgm_folder_path, f"{frame_idx:06}.pgm")
+            pgm_save_path = os.path.join(pgm_folder_path, f"{frame_idx}.pgm")
             cv2.imwrite(pgm_save_path, depth)
             frame_idx += 1
 
